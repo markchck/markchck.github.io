@@ -18,7 +18,7 @@ export const LOCATION_ADDRESS = "서울시 송파구 문정동 법원로 101"
 export const SHARE_ADDRESS = LOCATION
 export const SHARE_ADDRESS_TITLE = LOCATION
 
-//!
+//!티맵 경로 서울동부지방법원예식장 위도경도 알아내서 넣기
 export const WEDDING_HALL_POSITION = [127.1203921, 37.4833419]
 
 export const NMAP_PLACE_ID = 491389872 // 서울동부지방법원
