@@ -23,20 +23,19 @@ export const Calendar = () => {
       const diff = WEDDING_DATE.diff()
 
       setTsDiff(diff)
-    }, 1000)
+    }, 60000)
 
     return () => clearInterval(interval)
   })
 
   const diffs = useMemo(() => {
     const tsDiff_ = Math.abs(tsDiff)
-    const seconds = Math.floor((tsDiff_ % 60000) / 1000)
     const minutes = Math.floor((tsDiff_ % 3600000) / 60000)
     const hours = Math.floor((tsDiff_ % 86400000) / 3600000)
     const days = Math.floor(tsDiff_ / 86400000)
     const isAfter = tsDiff < 0
 
-    return { days, hours, minutes, seconds, isAfter }
+    return { days, hours, minutes, isAfter }
   }, [tsDiff])
 
   return (
@@ -105,14 +104,13 @@ export const Calendar = () => {
           <div />
           <div className="unit">MIN</div>
           <div />
-          <div className="unit">SEC</div>
+          {/* Add a line break between MIN and days */}
+          <br />
           <div className="count">{diffs.days}</div>
           <span>:</span>
           <div className="count">{diffs.hours}</div>
           <span>:</span>
           <div className="count">{diffs.minutes}</div>
-          <span>:</span>
-          <div className="count">{diffs.seconds}</div>
         </div>
         <div className="message">
           {GROOM_FIRSTNAME} & {BRIDE_FIRSTNAME}의 결혼식이{" "}

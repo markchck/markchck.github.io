@@ -26,7 +26,7 @@ export const KMAP_PLACE_ID = 1328399623 // 서울동부지방법원
 
 export const BRIDE_FULLNAME = "진주"
 export const BRIDE_FIRSTNAME = "주"
-export const BRIDE_TITLE = "장녀"
+export const BRIDE_TITLE = "딸"
 export const BRIDE_FATHER = "진형준"
 export const BRIDE_MOTHER = "김정아"
 export const BRIDE_INFO = [
@@ -52,7 +52,7 @@ export const BRIDE_INFO = [
 
 export const GROOM_FULLNAME = "기재민"
 export const GROOM_FIRSTNAME = "재민"
-export const GROOM_TITLE = "차남"
+export const GROOM_TITLE = "아들"
 export const GROOM_FATHER = "기한주"
 export const GROOM_MOTHER = "정지선"
 export const GROOM_INFO = [

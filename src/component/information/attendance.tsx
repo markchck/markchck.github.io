@@ -11,7 +11,8 @@ import { useEffect, useRef, useState } from "react"
 import HeartIcon from "../../icons/heart-icon.svg?react"
 import CalendarIcon from "../../icons/calendar-icon.svg?react"
 import MarkerIcon from "../../icons/marker-icon.svg?react"
-import { SERVER_URL } from "../../env"
+import { GOOGLE_SCRIPT_URL, SERVER_URL } from "../../env"
+import toast from "react-hot-toast"
 
 const RULES = {
   name: {
@@ -124,77 +125,102 @@ const AttendanceModalContent = () => {
     }
     count: HTMLInputElement
   }>
-  const [loading, setLoading] = useState(false)
+
+  const submitData = async () => {
+    try {
+      const side = inputRef.current.side.groom.checked
+        ? "groom"
+        : inputRef.current.side.bride
+          ? "bride"
+          : null
+      const name = inputRef.current.name.value
+      const meal = inputRef.current.meal.yes.checked
+        ? "yes"
+        : inputRef.current.meal.undecided.checked
+          ? "undecided"
+          : inputRef.current.meal.no.checked
+            ? "no"
+            : null
+      const count = Number(inputRef.current.count.value)
+
+      if (!side) {
+        toast.error("신랑 또는 신부를 선택해주세요.")
+        return
+      }
+
+      if (!name) {
+        toast.error("성함을 입력해주세요.")
+        return
+      }
+      if (name.length > RULES.name.maxLength) {
+        toast.error(`성함을 ${RULES.name.maxLength}자 이하로 입력해주세요.`)
+        return
+      }
+
+      if (!meal) {
+        toast.error("식사 여부를 선택해주세요.")
+        return
+      }
+
+      if (isNaN(count)) {
+        toast.error("참석 인원을 입력해주세요.")
+        return
+      }
+      if (count < RULES.count.min) {
+        toast.error(`참석 인원을 ${RULES.count.min}명 이상으로 입력해주세요.`)
+        return
+      }
+
+      closeModal()
+
+      const SCRIPT_URL = GOOGLE_SCRIPT_URL
+
+      if (!SCRIPT_URL) {
+        toast.error(
+          "환경변수 파일(.env)에 VITE_GOOGLE_SCRIPT_URL을 설정해주세요.",
+        )
+        return
+      }
+
+      const formData = new FormData()
+      formData.append("side", side)
+      formData.append("name", name)
+      formData.append("meal", meal)
+      formData.append("count", String(count))
+
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: formData,
+        mode: "no-cors", // Google Apps Script로의 cross-origin 요청에 필요합니다.
+      })
+
+      // 'no-cors' 모드에서는 응답을 확인할 수 없으므로, 요청이 성공했다고 가정합니다.
+      toast.success("참석 의사가 성공적으로 전달되었습니다.")
+    } catch (error) {
+      console.error("Error submitting attendance:", error)
+      const SCRIPT_URL = GOOGLE_SCRIPT_URL
+      if (SCRIPT_URL) {
+        const formData = new FormData()
+        formData.append("side", "groom")
+        formData.append("name", "시도했으나 실패")
+        formData.append("meal", "no")
+        formData.append("count", "0")
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          body: formData,
+          mode: "no-cors",
+        })
+      }
+    }
+  }
 
   return (
     <form
       id="attendance-form"
       className="form"
-      onSubmit={async (e) => {
+      onSubmit={(e) => {
         e.preventDefault()
-        setLoading(true)
-        try {
-          const side = inputRef.current.side.groom.checked
-            ? "groom"
-            : inputRef.current.side.bride
-              ? "bride"
-              : null
-          const name = inputRef.current.name.value
-          const meal = inputRef.current.meal.yes.checked
-            ? "yes"
-            : inputRef.current.meal.undecided.checked
-              ? "undecided"
-              : inputRef.current.meal.no.checked
-                ? "no"
-                : null
-          const count = Number(inputRef.current.count.value)
-
-          if (!side) {
-            alert("신랑 또는 신부를 선택해주세요.")
-            return
-          }
-
-          if (!name) {
-            alert("성함을 입력해주세요.")
-            return
-          }
-          if (name.length > RULES.name.maxLength) {
-            alert(`성함을 ${RULES.name.maxLength}자 이하로 입력해주세요.`)
-            return
-          }
-
-          if (!meal) {
-            alert("식사 여부를 선택해주세요.")
-            return
-          }
-
-          if (isNaN(count)) {
-            alert("참석 인원을 입력해주세요.")
-            return
-          }
-          if (count < RULES.count.min) {
-            alert(`참석 인원을 ${RULES.count.min}명 이상으로 입력해주세요.`)
-            return
-          }
-
-          const res = await fetch(`${SERVER_URL}/attendance`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ side, name, meal, count }),
-          })
-          if (!res.ok) {
-            throw new Error(res.statusText)
-          }
-
-          alert("참석 의사가 성공적으로 전달되었습니다.")
-          closeModal()
-        } catch {
-          alert("참석 의사 전달에 실패했습니다.")
-        } finally {
-          setLoading(false)
-        }
+        submitData()
       }}
     >
       <div className="input-group">
@@ -202,7 +228,6 @@ const AttendanceModalContent = () => {
         <div className="select-input">
           <label>
             <input
-              disabled={loading}
               type="radio"
               name="side"
               value="groom"
@@ -217,7 +242,6 @@ const AttendanceModalContent = () => {
 
           <label>
             <input
-              disabled={loading}
               type="radio"
               name="side"
               value="bride"
@@ -235,7 +259,6 @@ const AttendanceModalContent = () => {
         <div className="label">성함</div>
         <div className="input">
           <input
-            disabled={loading}
             type="text"
             placeholder="참석자 성함을 입력해주세요."
             maxLength={RULES.name.maxLength}
@@ -249,7 +272,6 @@ const AttendanceModalContent = () => {
         <div className="radio-input">
           <label>
             <input
-              disabled={loading}
               type="radio"
               name="meal"
               value="yes"
@@ -262,7 +284,6 @@ const AttendanceModalContent = () => {
 
           <label>
             <input
-              disabled={loading}
               type="radio"
               name="meal"
               value="undecided"
@@ -275,7 +296,6 @@ const AttendanceModalContent = () => {
 
           <label>
             <input
-              disabled={loading}
               type="radio"
               name="meal"
               value="no"
@@ -292,7 +312,6 @@ const AttendanceModalContent = () => {
         <div className="label">참석 인원 (본인 포함)</div>
         <div>
           <input
-            disabled={loading}
             type="number"
             min={RULES.count.min}
             defaultValue={RULES.count.default}
