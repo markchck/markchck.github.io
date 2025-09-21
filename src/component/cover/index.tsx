@@ -26,6 +26,8 @@ export const Cover = () => {
         {WEDDING_DATE.format("MM")}
         <div className="divider" />
         {WEDDING_DATE.format("DD")}
+        <div className="divider" />
+        {WEDDING_DATE.format("mm")}
       </div>
       <div className="wedding-day-of-week">
         {DAY_OF_WEEK[WEDDING_DATE.day()]}
