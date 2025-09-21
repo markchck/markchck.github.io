@@ -70,8 +70,9 @@
     .countdown {
       display: grid;
       width: 15rem;
-      grid-template-columns: 1fr 1rem 1fr 1rem 1fr 1rem 1fr;
+      grid-template-columns: 1fr 1rem 1fr 1rem 1fr;
       align-items: center;
+      justify-items: center;
       * {
         margin: 0 0.1rem;
       }

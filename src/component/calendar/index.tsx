@@ -103,9 +103,6 @@ export const Calendar = () => {
           <div className="unit">HOUR</div>
           <div />
           <div className="unit">MIN</div>
-          <div />
-          {/* Add a line break between MIN and days */}
-          <br />
           <div className="count">{diffs.days}</div>
           <span>:</span>
           <div className="count">{diffs.hours}</div>
