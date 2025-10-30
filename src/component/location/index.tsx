@@ -1,6 +1,7 @@
 import { Map } from "./map"
 import CarIcon from "../../icons/car-icon.svg?react"
 import BusIcon from "../../icons/bus-icon.svg?react"
+import HeartIcon from "../../icons/heart-icon.svg?react"
 import { LazyDiv } from "../lazyDiv"
 import { LOCATION, LOCATION_ADDRESS } from "../../const"
 
@@ -57,6 +58,21 @@ export const Location = () => {
             <b>서울동부지방법원 민원동(동백홀) </b> 검색
             <br />
             - 주차 요금은 무료입니다.
+            <br />
+          </div>
+          <div />
+          <div className="content"></div>
+        </div>
+        <div className="location-info">
+          <div className="transportation-icon-wrapper">
+            <HeartIcon className="transportation-icon" />
+          </div>
+          <div className="heading">안내</div>
+          <div />
+          <div className="content">
+            축하 화환은 정중히 사양합니다.
+            <br />
+            감사한 마음만 받겠습니다.
             <br />
           </div>
           <div />
