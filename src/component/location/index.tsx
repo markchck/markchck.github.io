@@ -70,7 +70,7 @@ export const Location = () => {
           <div className="heading">안내</div>
           <div />
           <div className="content">
-            <b>축하 화환은 정중히 사양합니다.</b>
+            <b>※ 축하 화환은 정중히 사양합니다.</b>
             <br />
             감사한 마음만 받겠습니다.
             <br />
