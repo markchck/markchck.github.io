@@ -10,7 +10,7 @@ dayjs.locale("ko")
 export { dayjs }
 
 export const WEDDING_DATE = dayjs.tz("2026-01-24 11:30", "Asia/Seoul")
-export const HOLIDAYS = [15]
+export const HOLIDAYS = [1]
 
 export const LOCATION = "서울동부지방법원 민원동(동백홀)"
 export const LOCATION_ADDRESS = "서울시 송파구 문정동 법원로 101"
