@@ -25,14 +25,13 @@ export const ShareButton = () => {
 
           kakao.Share.sendDefault({
             objectType: "location",
-            address: SHARE_ADDRESS,
+            address: "서울동부지방법원 동백홀",
+            // address: SHARE_ADDRESS,
             addressTitle: SHARE_ADDRESS_TITLE,
             content: {
               title: `${GROOM_FULLNAME} ❤️ ${BRIDE_FULLNAME}의 결혼식에 초대합니다.`,
               description:
                 WEDDING_DATE.format("YYYY년 MMMM D일 dddd A h시 m분") +
-                "\n" +
-                "\n" +
                 LOCATION,
               imageUrl:
                 window.location.protocol +
